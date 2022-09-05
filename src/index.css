@@ -1,13 +1,51 @@
-body {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+input {
+  @apply text-meshki;
+}
+/* Brush Script MT */
+.navbar {
+  @apply sticky top-0 text-[3vw]
+   font-bold 
+    text-sefid  py-3 flex justify-between
+    bg-gradient-to-b  from-meshki bg-tosi px-4
+    md:px-20 md:text-[1em]
+    border-b-2  border-abi;
+}
+.navItem {
+  @apply hover:text-abi transition-all;
+}
+.signUp {
+  @apply border-[1px] border-abi items-center justify-center  flex flex-col gap-5  p-5 rounded-3xl shadow-2xl  
+  mx-auto bg-gradient-to-t  from-meshki bg-tosi;
+}
+.signUp label {
+  @apply lg:p-2 w-full flex justify-end items-center lg:text-2xl  text-sefid;
+}
+.signUp label input {
+  @apply bg-sefid w-36 md:w-60 rounded-sm outline-none md:p-1 text-meshki;
+}
+.signupHead {
+  @apply text-sefid lg:text-2xl font-bold;
+}
+.btn {
+  @apply font-bold p-2 bg-sabz rounded-md active:bg-abitire;
+}
+.lgForm {
+  @apply h-[100vh] flex flex-col  pt-5 bg-meshki;
+}
+.changelg {
+  @apply text-abi scale-110 text-[2vw] md:text-[1vw] p-1 mx-auto rounded-sm border-[1px] border-b-[0px] border-abi bg-tosi;
+}
+.signUp label {
+  @apply flex justify-between;
 }
