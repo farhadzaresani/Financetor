@@ -7,10 +7,11 @@ export default function Edit({
   myData,
   userImage,
   setEditModal,
+  newName,
 }) {
   return (
-    <div className="absolute bg-meshki bg-opacity-70 z-10 flex w-full h-full">
-      <div className="bg-tosi rounded-lg m-auto p-5 flex gap-10 justify-center items-center flex-col">
+    <div className="absolute  bg-meshki bg-opacity-70 z-10 flex w-full h-full">
+      <div className="bg-tosi bg-gradient-to-t  from-meshki shadow-xl rounded-lg m-auto p-5 flex gap-10 justify-center items-center flex-col">
         <div className=" w-full">
           <button
             className="bg-orange w-6 rounded-full"
@@ -40,6 +41,7 @@ export default function Edit({
         <div className="flex flex-col  w-full ">
           <label className="text-sefid">Enter New Name</label>
           <input
+            value={newName}
             className="p-2 rounded-md w-2/3 "
             onChange={(e) => setNewName(e.target.value)}
           />

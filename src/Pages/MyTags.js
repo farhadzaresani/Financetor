@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import Loading from "../Components/Loading/Loading";
 
@@ -79,16 +79,28 @@ export default function MyTags() {
   const openEditModal = (id) => {
     setOnEdit(true);
     setThisId(id);
+    console.log(thisId);
   };
+  useEffect(() => {
+    if (thisId) {
+      const curentId = data.getMyTags.findIndex((item) => item._id == thisId);
+      setNewData({
+        name: data.getMyTags[curentId].name,
+        color: data.getMyTags[curentId].color,
+      });
+    }
+  }, [onEdit]);
 
   if (error) return <div>error</div>;
   if (loading) return <Loading />;
+  // console.log(newData);
+  // console.log(data.getMyTags[1]._id);
 
   return (
     <div>
       {create ? (
         <div className=" bg-meshki/50 absolute  flex w-full h-full z-10">
-          <div className="bg-tosi flex flex-col rounded-lg gap-10 p-5 m-auto">
+          <div className="bg-tosi bg-gradient-to-t  from-meshki shadow-xl  flex flex-col rounded-lg gap-10 p-5 m-auto">
             <button
               className="bg-orange w-6 rounded-full"
               onClick={() => setCreate(false)}
@@ -108,7 +120,8 @@ export default function MyTags() {
             <div className="flex flex-col">
               <label className="text-sefid">Enter color:</label>
               <input
-                className="p-1 rounded-md outline-none"
+                type="color"
+                className="p-1 w-full rounded-md outline-none"
                 value={tagData.color}
                 onChange={(e) =>
                   setTagData({ ...tagData, color: e.target.value })
@@ -124,7 +137,7 @@ export default function MyTags() {
 
       {onEdit ? (
         <div className=" bg-meshki/50 rounded-lg absolute flex w-full h-full z-10">
-          <div className="bg-tosi flex flex-col rounded-lg gap-10 p-5 m-auto">
+          <div className="bg-tosi bg-gradient-to-t  from-meshki shadow-xl  flex flex-col rounded-lg gap-10 p-5 m-auto">
             <button
               className="bg-orange w-6 rounded-full"
               onClick={() => setOnEdit(false)}
@@ -145,7 +158,8 @@ export default function MyTags() {
             <div className="flex flex-col">
               <label className="text-sefid">Enter new color:</label>
               <input
-                className="p-1 rounded-md outline-none"
+                type="color"
+                className="p-1 w-full rounded-md outline-none"
                 value={newData.color}
                 onChange={(e) =>
                   setNewData({ ...newData, color: e.target.value })

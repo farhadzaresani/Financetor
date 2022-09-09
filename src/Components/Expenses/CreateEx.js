@@ -1,35 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import Geo from "./Geo";
-
-const GET_TAG = gql`
-  query GetMyTags {
-    getMyTags {
-      name
-      _id
-    }
-  }
-`;
 
 export default function CreateEx({
   setCreate,
   expenData,
   setExpenData,
   createExpenses,
-  address,
-  setAddress,
+  setTagData,
+  tagData,
 }) {
-  const { loading, error, data } = useQuery(GET_TAG);
+  const [openTagList, setOpenTagList] = useState(false);
 
-  if (error) return <div>error</div>;
-  if (loading) return <div>loading</div>;
-  //   console.log(data.getMyTags);
-  const tagData = data.getMyTags;
-  const addressData = expenData.address;
-  // console.log(expenData.address.formattedAddress);
+  const isSelect = (i) => {
+    const clone = [...tagData];
+    clone[i].isSelect = !clone[i].isSelect;
+    setTagData(clone);
+  };
+
   return (
-    <div className=" bg-meshki/50 absolute  flex gap-5 w-full h-full z-10">
-      <div className="bg-tosi flex flex-col rounded-lg gap-10 p-5 m-auto">
+    <div className="flex justify-center ">
+      <div
+        onClick={() => setCreate(false)}
+        className=" bg-meshki/50 absolute  flex gap-5 w-full h-full z-10"
+      ></div>
+      <div className="bg-tosi bg-gradient-to-t absolute z-20 mt-20   from-meshki shadow-xl  flex flex-col rounded-lg gap-10 p-5 ">
         <button
           className="bg-orange w-6 rounded-full"
           onClick={() => setCreate(false)}
@@ -41,47 +36,31 @@ export default function CreateEx({
             <label className="text-sefid">Formatted Address:</label>
             <input
               className="p-1 rounded-md outline-none"
-              // value={address.formattedAddress}
               onChange={(e) =>
-                setAddress({
-                  ...expenData.address,
-                  FormattedAddress: e.target.value,
-                })
+                (expenData.address.FormattedAddress = e.target.value)
               }
             />
             <label className="text-sefid">Municipality Zone:</label>
             <input
               type="number"
               className="p-1 rounded-md outline-none"
-              // value={expenData.address.municipalityZone}
               onChange={(e) =>
-                setAddress({
-                  ...expenData.address,
-                  MunicipalityZone: e.target.value,
-                })
+                (expenData.address.MunicipalityZone = parseFloat(
+                  e.target.value
+                ))
               }
             />
             <label className="text-sefid">Neighbourhood:</label>
             <input
               className="p-1 rounded-md outline-none"
-              //   value={expenData.address.neighbourhood}
               onChange={(e) =>
-                setAddress({
-                  ...expenData.address,
-                  Neighbourhood: e.target.value,
-                })
+                (expenData.address.Neighbourhood = e.target.value)
               }
             />
             <label className="text-sefid">Place:</label>
             <input
               className="p-1 rounded-md outline-none"
-              //   value={expenData.address.neighbourhood}
-              onChange={(e) =>
-                setAddress({
-                  ...expenData.address,
-                  Place: e.target.value,
-                })
-              }
+              onChange={(e) => (expenData.address.Place = e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -110,28 +89,42 @@ export default function CreateEx({
                 })
               }
             />
-            <div className="flex flex-col gap-1">
-              <label className="text-sefid">Tag:</label>
-              <select
-                className="p-2 w-56 rounded-lg"
-                onChange={(e) =>
-                  setExpenData({
-                    ...expenData,
-                    tags: e.target.value,
-                  })
-                }
+            <div className="flex mt-5 gap-1">
+              <label
+                onClick={() => {
+                  setOpenTagList(!openTagList);
+                }}
+                className="text-sefid"
               >
-                <option>Select One...</option>
-                {tagData.map((item, i) => {
-                  return (
-                    <option key={i} value={item._id}>
-                      {item.name}
-                    </option>
-                  );
-                })}
-              </select>
+                Tag:
+              </label>
+              <ul
+                className={`${
+                  openTagList ? "" : "hidden"
+                }  rounded-lg absolute transition-all  ml-10 `}
+              >
+                {/* <option>Select One...</option> */}
+                <div className="bg-sefid p-2 w-36  rounded-lg ">
+                  {tagData.map((item, i) => {
+                    // console.log(item.isSelect);
+
+                    return (
+                      <li
+                        onClick={() => isSelect(i)}
+                        className={`${
+                          item.isSelect === true ? "bg-abitire" : ""
+                        } border-b-[1px] cursor-pointer border-meshki border-opacity-40`}
+                        key={i}
+                        value={item._id}
+                      >
+                        {item.name}
+                      </li>
+                    );
+                  })}
+                </div>
+              </ul>
             </div>
-            <Geo expenData={expenData} setExpenData={setExpenData} />
+            {/* <Geo expenData={expenData} setExpenData={setExpenData} /> */}
           </div>
         </div>
         <button

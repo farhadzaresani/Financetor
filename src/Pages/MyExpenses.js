@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import CreateEx from "../Components/Expenses/CreateEx";
 import Loading from "../Components/Loading/Loading";
@@ -13,17 +13,32 @@ const CREATE_EXPENSES = gql`
   }
 `;
 const GET_EXPENSES = gql`
-  query GetMyExpenses {
+  query {
     getMyExpenses {
       _id
       amount
       tags {
+        _id
         name
+        color
+      }
+      geo {
+        lat
+        lon
       }
       date
       address {
+        MunicipalityZone
+        Neighbourhood
         FormattedAddress
+        Place
       }
+    }
+
+    getMyTags {
+      name
+      _id
+      color
     }
   }
 `;
@@ -39,23 +54,18 @@ const DELETE_EXPENSES = gql`
 
 export default function MyExpenses() {
   const { loading, error, data, refetch } = useQuery(GET_EXPENSES);
+  const [tagData, setTagData] = useState();
   const [expen] = useMutation(CREATE_EXPENSES);
   const [remove] = useMutation(DELETE_EXPENSES);
   const [create, setCreate] = useState(false);
   const [thisId, setThisId] = useState();
   const [deleteModal, setDeleteModal] = useState(false);
-  const [address, setAddress] = useState({
-    formattedAddress: "",
-    municipalityZone: 8,
-    neighbourhood: "sd",
-    place: "asd",
-  });
   const [expenData, setExpenData] = useState({
     address: {
-      FormattedAddress: address.formattedAddress,
-      MunicipalityZone: address.municipalityZone,
-      Neighbourhood: address.neighbourhood,
-      Place: address.place,
+      FormattedAddress: "",
+      MunicipalityZone: "",
+      Neighbourhood: "",
+      Place: "",
     },
     amount: "",
     date: "",
@@ -65,7 +75,7 @@ export default function MyExpenses() {
     },
     tags: "",
   });
-
+  console.log(expenData);
   const createExpenses = async () => {
     try {
       const {
@@ -99,10 +109,28 @@ export default function MyExpenses() {
     setDeleteModal(true);
   };
 
+  useEffect(() => {
+    if (data) {
+      const newTag = data.getMyTags.map((item) => {
+        item = { ...item, isSelect: false };
+        return item;
+      });
+      setTagData(newTag);
+    }
+  }, [data]);
+  useEffect(() => {
+    if (tagData) {
+      const toSendTag = tagData
+        .filter((tag) => tag.isSelect === true)
+        .map((item) => {
+          return item._id;
+        });
+      expenData.tags = toSendTag;
+    }
+  }, [tagData]);
   if (error) return <div>error</div>;
   if (loading) return <Loading />;
   console.log(data);
-
   return (
     <div>
       {deleteModal ? (
@@ -114,11 +142,11 @@ export default function MyExpenses() {
       {create ? (
         <CreateEx
           setCreate={setCreate}
-          expenData={expenData}
           setExpenData={setExpenData}
-          address={address}
-          setAddress={setAddress}
+          expenData={expenData}
           createExpenses={createExpenses}
+          setTagData={setTagData}
+          tagData={tagData}
         />
       ) : null}
 

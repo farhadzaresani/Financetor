@@ -18,8 +18,7 @@ input {
    font-bold 
     text-sefid  py-3 flex justify-between
     bg-gradient-to-b  from-meshki bg-tosi px-4
-    md:px-20 md:text-[1em]
-    border-b-2  border-abi;
+    md:px-20 md:text-[1em];
 }
 .navItem {
   @apply hover:text-abi transition-all;
@@ -44,8 +43,11 @@ input {
   @apply h-[100vh] flex flex-col  pt-5 bg-meshki;
 }
 .changelg {
-  @apply text-abi scale-110 text-[2vw] md:text-[1vw] p-1 mx-auto rounded-sm border-[1px] border-b-[0px] border-abi bg-tosi;
+  @apply text-abi scale-110 z-0 text-[2vw] md:text-[1vw] p-1 mx-auto rounded-sm border-[1px] border-b-[0px] border-abi bg-tosi;
 }
 .signUp label {
   @apply flex justify-between;
+}
+.sidebarItem {
+  @apply opacity-60 hover:opacity-100 transition-all;
 }

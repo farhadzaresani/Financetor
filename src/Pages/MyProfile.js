@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import Cookies from "universal-cookie";
 import userImage from "../Assets/Images/userImage.png";
 import Edit from "../Components/EditProfile/Edit";
 import Loading from "../Components/Loading/Loading";
+import TagsChart from "../Components/ProfilePage/TagsChart";
+import ExpensesChart from "../Components/ProfilePage/ExpensesChart";
 
 const MY_DATA = gql`
   query Me {
@@ -13,7 +15,25 @@ const MY_DATA = gql`
       username
       img
       myTags {
+        _id
         name
+        color
+      }
+      myExpenses {
+        _id
+        amount
+        tags {
+          _id
+          name
+          color
+        }
+        date
+        address {
+          MunicipalityZone
+          Neighbourhood
+          FormattedAddress
+          Place
+        }
       }
     }
   }
@@ -34,7 +54,6 @@ export default function MyProfile() {
   const [editModal, setEditModal] = useState(false);
   const [newName, setNewName] = useState("");
   const [image, setImage] = useState(null);
-  // const FormData = new FormData();
 
   const editProfile = async () => {
     try {
@@ -47,22 +66,32 @@ export default function MyProfile() {
       });
       console.log(msg);
       console.log(status);
-      if (msg === "ok!") return refetch(), setEditModal(false);
+      refetch();
+      if (msg === "ok!")
+        return window.location.assign(
+          `http://localhost:3000/Dashboard/MyProfile`
+        );
     } catch (error) {
       console.log(error);
     }
   };
 
+  useEffect(() => {
+    if (!loading) return setNewName(myData.name);
+  }, [data]);
+
   if (error) return <div>error</div>;
   if (loading) return <Loading />;
-
+  console.log(data);
   const myData = data.me;
   const tag = data.me.myTags;
-  console.log(myData.img);
+  const expenses = data.me.myExpenses;
+
   return (
     <>
       {editModal ? (
         <Edit
+          newName={newName}
           setNewName={setNewName}
           setImage={setImage}
           editProfile={editProfile}
@@ -76,7 +105,7 @@ export default function MyProfile() {
         <div className="space-y-10">
           <div className=" ">
             <img
-              className="w-36 h-36 rounded-full object-cover"
+              className="border-2 border-abi w-36 h-36 rounded-full object-cover"
               src={
                 myData.img === null
                   ? userImage
@@ -85,31 +114,19 @@ export default function MyProfile() {
             />
             <button
               onClick={() => setEditModal(true)}
-              className="opacity-50 text-sefid ml-6 "
+              className="opacity-50 text-sefid ml-6 hover:opacity-100 transition-all "
             >
-              edit profile
+              Edit Profile
             </button>
           </div>
           <div className="flex px-10 text-sefid">
             <h1>{myData.name}</h1>
           </div>
         </div>
-        <div className="py-10">
-          <h1 className="text-sefid uppercase opacity-40 font-bold py-5 ">
-            Tags
-          </h1>
-          <div className="flex gap-5 px-10 overflow-auto">
-            {tag.map((tg, i) => {
-              return (
-                <h1
-                  className="bg-tosi text-sefid flex justify-center items-center rounded-lg p-2"
-                  key={i}
-                >
-                  {tg.name}
-                </h1>
-              );
-            })}
-          </div>
+        <div className="py-10 flex">
+          <TagsChart tag={tag} />
+
+          <ExpensesChart expenses={expenses} />
         </div>
       </div>
     </>

@@ -1,16 +1,21 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Cookies from "universal-cookie";
 
 function Sidebar() {
   const [open, setOpen] = useState(false);
+  const [isActive, setIsActive] = useState();
   const cookie = new Cookies();
   const signOut = () => {
     cookie.remove("ut", { path: "/" });
   };
-  //   const openSidebar = () => {
-  //     setOpen(!open);
-  //   };
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname == "/Dashboard/MyProfile") setIsActive(0);
+    else if (location.pathname == "/Dashboard/MyTags") setIsActive(1);
+    else if (location.pathname == "/Dashboard/MyExpenses") setIsActive(2);
+  }, [location]);
 
   return (
     <div className="text-sefid">
@@ -24,20 +29,37 @@ function Sidebar() {
       </button>
       <div
         className={`${
-          open ? "" : "translate-x-20 transition-all"
-        } ease-out overflow-hidden`}
+          open ? " " : "translate-x-20 "
+        }  overflow-hidden transition-all`}
       >
         <div
-          className=" bg-tosi text-sm  w-[5em] 
+          className=" bg-tosi pt-10 font-bold  text-sm  w-[5.5em] 
         flex flex-col items-center 
         justify-around h-full fixed  right-0"
         >
-          {/* <button onClick={() => openSidebar()}>X</button> */}
-          <Link to="/">Home</Link>
-          <Link to="/Dashboard/MyProfile"> Profile</Link>
-          <Link to="/Dashboard/MyTags">Tags</Link>
-          <Link to="/Dashboard/MyExpenses">Expenses</Link>
-          <Link onClick={() => signOut()} to="/">
+          <Link className={`sidebarItem`} to="/">
+            Home
+          </Link>
+          <Link
+            className={`${isActive === 0 ? "text-abi" : "sidebarItem"} `}
+            to="/Dashboard/MyProfile"
+          >
+            {" "}
+            Profile
+          </Link>
+          <Link
+            className={`${isActive === 1 ? "text-abi " : "sidebarItem"} `}
+            to="/Dashboard/MyTags"
+          >
+            Tags
+          </Link>
+          <Link
+            className={`${isActive === 2 ? "text-abi " : "sidebarItem"} `}
+            to="/Dashboard/MyExpenses"
+          >
+            Expenses
+          </Link>
+          <Link className="sidebarItem" onClick={() => signOut()} to="/">
             Sign Out
           </Link>
         </div>
