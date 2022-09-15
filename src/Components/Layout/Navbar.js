@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { Login, ProfileCircle } from "iconsax-react";
 
 export default function Navbar() {
   const [isActive, setIsActive] = useState(0);
@@ -46,14 +47,14 @@ export default function Navbar() {
             className={`${isActive === 3 ? "invisible" : ""} navItem`}
             to="Dashboard/MyProfile"
           >
-            Profile
+            <ProfileCircle size="32" color="white" variant="Bulk" />
           </Link>
         ) : (
           <Link
             className={`${isActive === 3 ? "invisible" : ""} navItem`}
             to="LoginSignup"
           >
-            LoginSignup
+            <Login size="32" color="white" variant="Bulk" />
           </Link>
         )}
       </div>

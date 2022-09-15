@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import CreateEx from "../Components/Expenses/CreateEx";
 import Loading from "../Components/Loading/Loading";
 import DeleteEx from "../Components/Expenses/DeleteEx";
+import { Trash, Add } from "iconsax-react";
 
 const CREATE_EXPENSES = gql`
   mutation Create_expense($data: ExpenseInfo!) {
@@ -53,6 +54,7 @@ const DELETE_EXPENSES = gql`
 `;
 
 export default function MyExpenses() {
+  const mapRef = useRef(null);
   const { loading, error, data, refetch } = useQuery(GET_EXPENSES);
   const [tagData, setTagData] = useState();
   const [expen] = useMutation(CREATE_EXPENSES);
@@ -70,12 +72,15 @@ export default function MyExpenses() {
     amount: "",
     date: "",
     geo: {
-      lat: 355501,
-      lon: 51515,
+      lat: 0,
+      lon: 0,
     },
     tags: "",
   });
   console.log(expenData);
+
+  console.log(mapRef);
+
   const createExpenses = async () => {
     try {
       const {
@@ -83,7 +88,16 @@ export default function MyExpenses() {
           create_expense: { msg, status },
         },
       } = await expen({
-        variables: { data: expenData },
+        variables: {
+          data: {
+            ...expenData,
+            geo: {
+              ...expenData.geo,
+              lat: parseFloat(mapRef.current.getCenter().lat),
+              lon: parseFloat(mapRef.current.getCenter().lng),
+            },
+          },
+        },
       });
       console.log(msg);
       console.log(status);
@@ -147,14 +161,29 @@ export default function MyExpenses() {
           createExpenses={createExpenses}
           setTagData={setTagData}
           tagData={tagData}
+          mapRef={mapRef}
         />
       ) : null}
 
-      <div className="text-sefid w-[80vw] pb-36 pt-20 m-auto min-h-screen ">
-        <div className="flex  w-[55%] justify-between">
-          <button className="btn mb-10" onClick={() => setCreate(true)}>
+      <div className="text-sefid w-[80vw] pb-36 pt-20 m-auto min-h-[150vh]  lg:min-h-screen ">
+        <div className="flex   justify-between">
+          {/* <button className="btn mb-10" onClick={() => setCreate(true)}>
             Create +
-          </button>
+          </button> */}
+          <div
+            onClick={() => setCreate(true)}
+            className="flex justify-center items-center hover:scale-110 transition-all duration-300"
+          >
+            <h1 className="uppercase  text-3xl font-[fantasy] text-sabz">
+              Create
+            </h1>
+            <Add
+              className="cursor-pointer "
+              size="40"
+              color="#2E8B57"
+              variant="Bulk"
+            />
+          </div>
           <h1 className="text-4xl font-[fantasy] "> EXPENSES</h1>
         </div>
         <div className="flex flex-col gap-5">
@@ -171,12 +200,13 @@ export default function MyExpenses() {
                   </h1>
                   <h1 className="flex gap-2 text-sm opacity-40">{item.date}</h1>
                 </div>
-                <button
-                  className="bg-red p-1 rounded-sm"
+
+                <Trash
+                  className="  opacity-70 cursor-pointer rounded-sm"
                   onClick={() => removeItem(item._id)}
-                >
-                  Delete
-                </button>
+                  size="32"
+                  color="red"
+                />
               </div>
             );
           })}

@@ -1,4 +1,5 @@
 import React from "react";
+import { CloseCircle } from "iconsax-react";
 
 export default function Edit({
   setNewName,
@@ -13,12 +14,13 @@ export default function Edit({
     <div className="absolute  bg-meshki bg-opacity-70 z-10 flex w-full h-full">
       <div className="bg-tosi bg-gradient-to-t  from-meshki shadow-xl rounded-lg m-auto p-5 flex gap-10 justify-center items-center flex-col">
         <div className=" w-full">
-          <button
-            className="bg-orange w-6 rounded-full"
+          <CloseCircle
+            size="32"
+            color="#FF8A65"
+            variant="Bulk"
+            className=" cursor-pointer absolute"
             onClick={() => setEditModal(false)}
-          >
-            X
-          </button>
+          />
         </div>
         <div className="space-y-5">
           <img

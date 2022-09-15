@@ -10,7 +10,8 @@ export default class Chart extends Component {
     });
 
     const series = props.tag.map((tag, i) => {
-      return i + 50;
+      console.log(tag._id.slice(-2));
+      return tag._id.slice(-2);
     });
 
     this.state = {

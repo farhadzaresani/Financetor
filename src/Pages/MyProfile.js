@@ -6,6 +6,7 @@ import Edit from "../Components/EditProfile/Edit";
 import Loading from "../Components/Loading/Loading";
 import TagsChart from "../Components/ProfilePage/TagsChart";
 import ExpensesChart from "../Components/ProfilePage/ExpensesChart";
+import { AddCircle } from "iconsax-react";
 
 const MY_DATA = gql`
   query Me {
@@ -101,29 +102,35 @@ export default function MyProfile() {
         />
       ) : null}
       <div className="w-[80%] min-h-screen mx-auto flex gap-10 flex-col p-2">
-        <h1 className="text-sefid  uppercase mx-auto">{myData.username}</h1>
+        <h1
+          className="text-sefid  tracking-widest hover:tracking-[3em] 
+        transition-all duration-700 text-2xl  uppercase mx-auto"
+        >
+          {myData.username}
+        </h1>
         <div className="space-y-10">
-          <div className=" ">
+          <div className=" flex relative ">
             <img
-              className="border-2 border-abi w-36 h-36 rounded-full object-cover"
+              className="border-2  border-abi w-36 h-36 rounded-full object-cover"
               src={
                 myData.img === null
                   ? userImage
                   : `http://localhost:80/${myData.img}`
               }
             />
-            <button
+            <AddCircle
+              className="absolute bg-meshki rounded-full cursor-pointer top-28 left-30"
+              size="32"
+              color="#2E8B57"
+              variant="Bulk"
               onClick={() => setEditModal(true)}
-              className="opacity-50 text-sefid ml-6 hover:opacity-100 transition-all "
-            >
-              Edit Profile
-            </button>
+            />
           </div>
-          <div className="flex px-10 text-sefid">
+          <div className="flex px-5 text-sefid">
             <h1>{myData.name}</h1>
           </div>
         </div>
-        <div className="py-10 flex">
+        <div className="py-10 sm:flex">
           <TagsChart tag={tag} />
 
           <ExpensesChart expenses={expenses} />

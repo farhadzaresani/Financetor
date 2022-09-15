@@ -1,12 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;400;500;600;700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Roboto Mono", monospace;
 }
 
 input {
@@ -16,34 +17,36 @@ input {
 .navbar {
   @apply sticky top-0 text-[3vw]
    font-bold 
-    text-sefid  py-3 flex justify-between
+    text-sefid  py-3 flex justify-between items-center
     bg-gradient-to-b  from-meshki bg-tosi px-4
     md:px-20 md:text-[1em];
 }
 .navItem {
-  @apply hover:text-abi transition-all;
+  @apply hover:text-abi uppercase duration-500 transition-all;
 }
 .signUp {
-  @apply border-[1px] border-abi items-center justify-center  flex flex-col gap-5  p-5 rounded-3xl shadow-2xl  
+  @apply border-[1px] border-abi items-center justify-center 
+   flex flex-col gap-5  p-5 rounded-3xl shadow-2xl  
   mx-auto bg-gradient-to-t  from-meshki bg-tosi;
 }
 .signUp label {
-  @apply lg:p-2 w-full flex justify-end items-center lg:text-2xl  text-sefid;
+  @apply w-full flex justify-end items-center lg:text-2xl  text-sefid;
 }
 .signUp label input {
-  @apply bg-sefid w-36 md:w-60 rounded-sm outline-none md:p-1 text-meshki;
+  @apply bg-sefid ml-1 w-2/3 md:max-w-prose rounded-sm outline-none md:p-[.25em] text-meshki;
 }
 .signupHead {
   @apply text-sefid lg:text-2xl font-bold;
 }
 .btn {
-  @apply font-bold p-2 bg-sabz rounded-md active:bg-abitire;
+  @apply font-bold uppercase text-sefid p-2 bg-sabz rounded-md active:bg-abitire;
 }
 .lgForm {
-  @apply h-[100vh] flex flex-col  pt-5 bg-meshki;
+  @apply min-h-screen flex flex-col  pt-5 bg-meshki;
 }
 .changelg {
-  @apply text-abi scale-110 z-0 text-[2vw] md:text-[1vw] p-1 mx-auto rounded-sm border-[1px] border-b-[0px] border-abi bg-tosi;
+  @apply text-sefid  text-[2vw] md:text-[1vw]
+   p-1 uppercase font-bold  rounded-lg  hover:text-abi active:bg-sefid bg-meshki;
 }
 .signUp label {
   @apply flex justify-between;

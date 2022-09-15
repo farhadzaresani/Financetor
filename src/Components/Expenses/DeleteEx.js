@@ -18,7 +18,10 @@ export default function DeleteEx({ deleteExpenses, setDeleteModal }) {
             <button className="btn w-20" onClick={() => deleteExpenses()}>
               Yes
             </button>
-            <button className="btn w-20" onClick={() => setDeleteModal(false)}>
+            <button
+              className="text-sefid rounded uppercase font-bold border-2 border-dashed w-20"
+              onClick={() => setDeleteModal(false)}
+            >
               No
             </button>
           </div>

@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import Geo from "./Geo";
+import Tags from "./Tags";
+import { CloseCircle } from "iconsax-react";
 
 export default function CreateEx({
   setCreate,
@@ -9,6 +11,7 @@ export default function CreateEx({
   createExpenses,
   setTagData,
   tagData,
+  mapRef,
 }) {
   const [openTagList, setOpenTagList] = useState(false);
 
@@ -19,48 +22,68 @@ export default function CreateEx({
   };
 
   return (
-    <div className="flex justify-center ">
+    <div className="flex justify-center  ">
       <div
         onClick={() => setCreate(false)}
-        className=" bg-meshki/50 absolute  flex gap-5 w-full h-full z-10"
+        className=" bg-meshki/50 absolute  w-full h-full z-10"
       ></div>
-      <div className="bg-tosi bg-gradient-to-t absolute z-20 mt-20   from-meshki shadow-xl  flex flex-col rounded-lg gap-10 p-5 ">
-        <button
-          className="bg-orange w-6 rounded-full"
+      <div className="bg-tosi max-w-[100%] bg-gradient-to-t absolute z-20 mt-20    from-meshki shadow-xl  flex flex-col rounded-lg gap-10 p-5 ">
+        <div className="m-auto">
+          <h2 className="font-bold uppercase text-sefid "> Create Expenses</h2>
+        </div>
+
+        <CloseCircle
+          size="32"
+          color="#FF8A65"
+          variant="Bulk"
+          className=" cursor-pointer absolute"
           onClick={() => setCreate(false)}
-        >
-          X
-        </button>
-        <div className="flex gap-5">
+        />
+
+        <div className=" md:flex gap-5">
           <div className="flex flex-col gap-2">
             <label className="text-sefid">Formatted Address:</label>
             <input
               className="p-1 rounded-md outline-none"
-              onChange={(e) =>
-                (expenData.address.FormattedAddress = e.target.value)
-              }
+              onChange={(e) => {
+                const clone = JSON.parse(JSON.stringify(expenData));
+                clone.address.FormattedAddress = e.target.value;
+                setExpenData(clone);
+              }}
             />
             <label className="text-sefid">Municipality Zone:</label>
             <input
               type="number"
               className="p-1 rounded-md outline-none"
-              onChange={(e) =>
-                (expenData.address.MunicipalityZone = parseFloat(
-                  e.target.value
-                ))
-              }
+              onChange={(e) => {
+                const clone = JSON.parse(JSON.stringify(expenData));
+                clone.address.MunicipalityZone = parseFloat(e.target.value);
+                setExpenData(clone);
+              }}
             />
             <label className="text-sefid">Neighbourhood:</label>
             <input
               className="p-1 rounded-md outline-none"
-              onChange={(e) =>
-                (expenData.address.Neighbourhood = e.target.value)
-              }
+              onChange={(e) => {
+                const clone = JSON.parse(JSON.stringify(expenData));
+                clone.address.Neighbourhood = e.target.value;
+                setExpenData(clone);
+              }}
             />
             <label className="text-sefid">Place:</label>
             <input
               className="p-1 rounded-md outline-none"
-              onChange={(e) => (expenData.address.Place = e.target.value)}
+              onChange={(e) => {
+                const clone = JSON.parse(JSON.stringify(expenData));
+                clone.address.Place = e.target.value;
+                setExpenData(clone);
+              }}
+            />
+            <Tags
+              openTagList={openTagList}
+              tagData={tagData}
+              isSelect={isSelect}
+              setOpenTagList={setOpenTagList}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -89,51 +112,22 @@ export default function CreateEx({
                 })
               }
             />
-            <div className="flex mt-5 gap-1">
-              <label
-                onClick={() => {
-                  setOpenTagList(!openTagList);
-                }}
-                className="text-sefid"
-              >
-                Tag:
-              </label>
-              <ul
-                className={`${
-                  openTagList ? "" : "hidden"
-                }  rounded-lg absolute transition-all  ml-10 `}
-              >
-                {/* <option>Select One...</option> */}
-                <div className="bg-sefid p-2 w-36  rounded-lg ">
-                  {tagData.map((item, i) => {
-                    // console.log(item.isSelect);
-
-                    return (
-                      <li
-                        onClick={() => isSelect(i)}
-                        className={`${
-                          item.isSelect === true ? "bg-abitire" : ""
-                        } border-b-[1px] cursor-pointer border-meshki border-opacity-40`}
-                        key={i}
-                        value={item._id}
-                      >
-                        {item.name}
-                      </li>
-                    );
-                  })}
-                </div>
-              </ul>
-            </div>
-            {/* <Geo expenData={expenData} setExpenData={setExpenData} /> */}
+            <Geo
+              expenData={expenData}
+              setExpenData={setExpenData}
+              mapRef={mapRef}
+            />
           </div>
         </div>
-        <button
-          disabled={!expenData}
-          className={`disabled:opacity-50  btn w-20`}
-          onClick={() => createExpenses()}
-        >
-          Submit
-        </button>
+        <div className="flex ">
+          <button
+            disabled={!expenData}
+            className={`disabled:opacity-50  btn  `}
+            onClick={() => createExpenses()}
+          >
+            Submit
+          </button>
+        </div>
       </div>
     </div>
   );

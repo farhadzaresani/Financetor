@@ -12,7 +12,11 @@ module.exports = {
       abitire: "rgb(106, 90, 205)",
       orange: "#FF8C00",
     },
-    extend: {},
+    extend: {
+      animation: {
+        "bounce-slow": "bounce 3s linear infinite",
+      },
+    },
   },
   plugins: [],
 };
